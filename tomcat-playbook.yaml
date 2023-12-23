@@ -1,0 +1,59 @@
+- hosts: all
+  become: yes
+  tasks:
+  
+  
+    - name: update
+      apt:
+        name: update_cache=yes
+        ignore_errors: yes
+        
+    - name: Install default JDK
+      apt:
+        name: default-jdk
+        state: present 
+        
+    - name: Adding Group and user for tomcat 
+      shell: groupadd tomcat && useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+      
+      
+    - name: Downloading Apache tomcat tar.
+      shell: curl -O https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.97/bin/apache-tomcat-8.5.97.tar.gz
+      args:
+        chdir: /tmp
+        
+    - name: Creating Apache tomcat home directory.
+      command: mkdir /opt/tomcat 
+      
+      
+    - name: Extracting apache tomcat.
+      shell: tar -xzvf /tmp/apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+      
+    - name: updating permissions.
+      command: "{{ item }}"
+      with_items:
+        - chown -R tomcat:tomcat /opt/tomcat
+        - chmod -R g+r /opt/tomcat/conf
+        - chmod g+x /opt/tomcat/conf
+        
+    - name: Creating services for apache tomcat.
+      file: 
+        path: /etc/systemd/system/tomcat.service
+        state: touch 
+        mode: u+rwx,g-rwz,o-x
+        
+        
+        
+    - name: download foo.conf 
+      get_url: 
+        url: https://raw.githubusercontent.com/aftab70/Apache_Tomcat/master/tomcat_services
+        dest: /etc/systemd/system/tomcat.service
+        
+        
+    - name: Daemon reload.
+      command: systemctl daemon-reload
+      
+    - name: startting apache tomcat service.
+      service: name=tomcat state=started
+    
+     
