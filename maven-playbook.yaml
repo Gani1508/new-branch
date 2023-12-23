@@ -1,0 +1,41 @@
+- hosts: all
+  become:yes
+  tasks:
+  
+  
+    - name: Install python-software-proprtiees
+      apt:
+        name: software-properties-common
+        state: present 
+        
+    - name: Add java ppa repository 
+      apt_repository:
+        repo: ppa:webupd8team/java
+      when: ansible_distribution == 'Ubuntu'
+     
+     
+    - name: update apk package 
+      apt: 
+        update_cache: yes
+        
+    - name: Install default JDK
+      apt:
+        name: default-jdk
+        state: present 
+
+    - name: Download apache maven binary
+      get_url:
+        url: https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+        dest: "/tmp/apache-maven-3.9.6-bin.tar.gz"
+        
+        
+    - name: Extract apache maven 
+      ansible.builtin.unarchieve:
+        src: "/tmp/apache-maven-3.9.6-bin.tar.gz"
+        dest: "/opt/"
+        remote-src: yes
+        
+    - name: setup maven alternaives 
+      ansible.builtin.command: "sudo update-alternatives --install /usr/bin/mvn maven /opt/apache-maven-3.3.9/bin/mvn 1001"
+      
+        
