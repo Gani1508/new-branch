@@ -26,15 +26,12 @@
     - name: Download apache maven binary
       get_url:
         url: https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
-        dest: "/home/edureka/Downloads/apache-maven-3.3.9-bin.tar.gz"
-
-    - name: Move to the Downloads directory
-      command: cd /home/edureka/Downloads/
+        dest: "/home/edureka/Downloads/apache-maven-3.9.6-bin.tar.gz"
         
         
     - name: Extract apache maven 
       ansible.builtin.unarchieve:
-        src: "/home/edureka/Downloads/apache-maven-3.3.9-bin.tar.gz"
+        src: "/home/edureka/Downloads/apache-maven-3.9.6-bin.tar.gz"
         dest: "/opt/"
         remote-src: yes
         
@@ -45,6 +42,6 @@
       command: systemctl daemon-reload
       
     - name: Start Maven service
-      command: "/opt/apache-maven-3.3.9/bin/mvn --version"
+      command: "/opt/apache-maven-3.9.6/bin/mvn --version"
       
         
