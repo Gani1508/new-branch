@@ -39,7 +39,7 @@
       file: 
         path: /etc/systemd/system/tomcat.service
         state: touch 
-        mode: u+rwx,g-rwz,o-x
+        mode: u+rwx,g-rwx,o-x
         
         
         
