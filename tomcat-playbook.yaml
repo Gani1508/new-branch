@@ -4,9 +4,8 @@
   
   
     - name: update
-      apt:
-        name: update_cache=yes
-        ignore_errors: yes
+      apt: update_cache=yes
+      ignore_errors: yes
         
     - name: Install default JDK
       apt:
